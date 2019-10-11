@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+
+<CATALOG>
+    <BOOK category="Technical">
+        <ISBN>651-4-81-4651-0</ISBN>
+        <TITLE>The C++ Programming Language</TITLE>
+        <AUTHOR>Bjarne Stroustrup</AUTHOR>
+    </BOOK>
+    <BOOK category="Technical">
+        <ISBN>725-3-25-6914-0</ISBN>
+        <TITLE>Python programming</TITLE>
+        <AUTHOR>Mark Lutz</AUTHOR>
+    </BOOK>
+    <BOOK category="Cookery">
+        <ISBN>683-4-55-6672-0</ISBN>
+        <TITLE>Delalicious</TITLE>
+        <AUTHOR>Sinead Delahunty</AUTHOR>
+    </BOOK>
+    <BOOK category="Cookery">
+        <ISBN>149-0-28-6486-0</ISBN>
+        <TITLE>Eat up Raise Your Game</TITLE>
+        <AUTHOR>Daniel Davey</AUTHOR>
+    </BOOK>
+</CATALOG>
