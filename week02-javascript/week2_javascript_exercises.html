@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--Aidan O'Connor_G00364756-->
+<!--HTML created for Week 3 exercises -->
+<html lang="en">
+    <head>
+        <title>Week 3 Exercises</title>
+        <style>
+    
+        </style>
+</head>
+
+<body>
+
+<!-- Exercise 1 - Create hidden element-->
+    <div style="display: none;">hidden element</div>
+<br/>
+<br/>
+
+<!-- Exercise 2 - "Hello World" to console-->
+    <button id="change" onclick="writetocon()">Click me to display "Hello World" in console</button>
+    <script>
+        function writetocon(){
+            console.log("Hello World");
+        }
+    </script>
+<!-- Exercise 3 - Input & Button, diplay in another div-->
+<br/>
+<br/>
+<div>
+    <input id="userin" style ="display: block; background-color: darkgrey; color: white;" value="Enter string">
+    <button type="submit" style ="display: block;" onclick="movetodiv()"> Click me to display input in new div </button>
+</div>
+<div id="div2" style ="display: block;">
+
+</div>
+    <script>
+        function movetodiv() {
+             var output= document.getElementById("userin").value
+               document.getElementById("div2").innerText = output
+        }
+    
+    </script>
+
+
+</body>
+
+</html>
