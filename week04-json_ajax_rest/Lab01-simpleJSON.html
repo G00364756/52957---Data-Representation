@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <title> JSON with AJAX (with jQuery)</title>
+       
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <h1>Convert to JSON</h1>
+        <div> <button onclick="converttoJSON()">Convert</button></div>
+    </body>
+    <script>
+        function converttoJSON(){
+            var jsonString = '{"isbn": 1234567, "Author": "Andrew Beatty","Title" : "the emptiness of ping-pong balls"}'
+            var obj = JSON.parse(jsonString)
+            console.log(obj.Author)
+        }
+    </script>
+        
