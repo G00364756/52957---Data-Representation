@@ -216,6 +216,7 @@
             });
         }
 
+    // For some reason getting a 400 bad request for this update section even though the data is being stringified and the same method is used for the DELETE method and no 400 bad request. Cannot figure out currently!
     function updateCar(car){
         console.log(JSON.stringify(car));
         //var car = {"reg":"181 G 1234","make":"Ford","model":"Modeo","price":"00"}
@@ -227,8 +228,8 @@
             "dataType": "JSON",
             contentType: "application/json; charset=utf-8",
             "success":function(result){
-                console.log(result);
-                document.getElementById("output").innerText = JSON.stringify(result);
+                //console.log(result);
+                //document.getElementById("output").innerText = JSON.stringify(result);
                 },
             "error":function(xhr,status,error){
                 console.log("error: "+status+" msg:"+error);
@@ -246,8 +247,8 @@
             "dataType": "JSON",
             contentType: "application/json; charset=utf-8",
             "success":function(result){
-            console.log(result);
-            document.getElementById("output").innerText = JSON.stringify(result);
+            //console.log(result);
+            //document.getElementById("output").innerText = JSON.stringify(result);
             },
             "error":function(xhr,status,error){
             console.log("error: "+status+" msg:"+error);
