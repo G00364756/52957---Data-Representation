@@ -1,73 +1,65 @@
 from flask import Flask, jsonify, abort, request
+from shopDAO import shopDAO
 
 app = Flask(__name__, static_url_path='', static_folder='.')
 
-books=[
-    {"id":1, "Title":"Harry Potter", "Author":"J.K. Rowling", "Price":2500},
-    {"id":2, "Title":"Homo Sapiens", "Author":"Yuval Herrari", "Price":3000},
-    {"id":3, "Title":"Ross O'Carroll-Kelly", "Author":"Paul Howard", "Price":2700}
-]
-nextId=4
-
-# curl "http://127.0.0.1:5000/books"
-@app.route('/books')
+# curl "http://127.0.0.1:5000/shop"
+@app.route('/shop')
 def getAll():
-    return jsonify(books)
+    results = shopDAO.getAll()
+    return jsonify(results)
 
-# curl "http://127.0.0.1:5000/books/2"
-@app.route('/books/<int:id>')
+# curl "http://127.0.0.1:5000/shop/2"
+@app.route('/shop/<int:id>')
 def findById(id):
-    foundBooks = list(filter(lambda b: b['id']==id, books))
-    if len(foundBooks) == 0:
-        abort(404)
-    
-    return jsonify(foundBooks[0])
+    foundShop = shopDAO.findByID(id)
+    return jsonify(foundShop)
 
-# λ curl -h "Content-Type:application/json" -X POST -d "{\"Title\":\"hello\",\"Author\":\"someone\",\"Price\":123}" "http://127.0.0.1:5000/books/2"
-@app.route('/books', methods=['POST'])
+# curl -i -H "Content-Type:application/json" -X POST -d "{\"Product\":\"Eggs\",\"Barcode\":\"1037713191222\",\"Price\":3.20}" "http://127.0.0.1:5000/shop"
+# curl -i -H "Content-Type:application/json" -X POST -d "{\"Product\":\"Vegetable Soup\",\"Barcode\":\"1034555215643\",\"Price\":2.10}" "http://127.0.0.1:5000/shop"
+# curl -i -H "Content-Type:application/json" -X POST -d "{\"Product\":\"Sausages\",\"Barcode\":\"1035629985643\",\"Price\":4.00}" "http://127.0.0.1:5000/shop"
+# curl -i -H "Content-Type:application/json" -X POST -d "{\"Product\":\"Milk\",\"Barcode\":\"1032336985993\",\"Price\":1.50}" "http://127.0.0.1:5000/shop"
+@app.route('/shop', methods=['POST'])
+
 def create():
-    global nextId
     if not request.json:
         abort(400)
-    # other checking
-    book = {
-        "id": nextId,
-        "Title": request.json['Title'],
-        "Author": request.json['Author'],
+    product = {
+        "Product": request.json['Product'],
+        "Barcode": request.json['Barcode'],
         "Price": request.json['Price'],
     }
-    nextId += 1
-    books.append(book)
-    return jsonify(book)
+    values = (product['Product'],product['Barcode'],product['Price'])
+    newId = shopDAO.create(values)
+    product['id'] = newId
+    return jsonify(product)
 
-# curl  -i -H "Content-Type:application/json" -X PUT -d "{\"Title\":\"hello\",\"Author\":\"someone\",\"Price\":5000}" http://127.0.0.1:5000/books/3
-@app.route('/books/<int:id>', methods=['PUT'])
+# curl -i -H "Content-Type:application/json" -X PUT -d "{\"Product\":\"Eggs\",\"Barcode\":\"1037713191222\",\"Price\":2.90}" "http://127.0.0.1:5000/shop/2"
+@app.route('/shop/<int:id>', methods=['PUT'])
 def update(id):
-    foundBooks = list(filter(lambda t: t['id']== id, books ))
-    if (len(foundBooks) == 0):
+    foundShop = shopDAO.findByID(id)
+    if not foundShop:
         abort(404)
-    foundBook = foundBooks[0]
     if not request.json:
         abort(404)
     reqJson = request.json
-    if 'Price' in reqJson and type(reqJson['Price'] is not int):
-        abort(400)
-    if 'Title' in reqJson:
-        foundBook['Title'] = reqJson['Title']
-    if 'Author' in reqJson:
-        foundBook['Author'] = reqJson['Author']
+    # Could not get this part of the code to run for type float, had to comment out.
+    #if 'Price' in reqJson and type(reqJson['Price'] != float):
+     #   abort(400)
+    if 'Product' in reqJson:
+        foundShop['Product'] = reqJson['Product']
+    if 'Barcode' in reqJson:
+        foundShop['Barcode'] = reqJson['Barcode']
     if 'Price' in reqJson:
-        foundBook['Price'] = reqJson['Price']
-    return jsonify(foundBook)
+        foundShop['Price'] = reqJson['Price']
+    values = (foundShop['Product'],foundShop['Barcode'],foundShop['Price'], foundShop['id'])
+    shopDAO.update(values)
+    return jsonify(foundShop)
 
-    #return "in update By ID for id "+str(id)
-
-@app.route('/books/<int:id>', methods=['DELETE'])
+# curl -X DELETE "http://127.0.0.1:5000/shop/2"
+@app.route('/shop/<int:id>', methods=['DELETE'])
 def delete(id):
-    foundBooks = list(filter(lambda t: t['id']== id, books ))
-    if (len(foundBooks) == 0):
-        abort(404)
-    books.remove(foundBooks[0])
+    shopDAO.delete(id)
     return jsonify({"done": True})
 
 if __name__ == '__main__':
