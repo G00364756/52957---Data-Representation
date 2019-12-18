@@ -1,0 +1,21 @@
+<ul id="myList"><li>Coffee</li><li>Tea</li></ul>
+
+<p>Click the button to get the HTML content of the list's first child node.</p>
+
+<button onclick="myFunction()">Try it</button>
+
+<p><strong>Note:</strong> Whitespace inside elements is considered as text, and text is considered as nodes.</p>
+
+<p>If you add whitespace before the first LI element, the result will be "undefined".</p>
+
+<p id="demo"></p>
+<p id="demo2"></p>
+
+<script>
+    function myFunction() {
+        var list = document.getElementById("myList").firstChild.innerHTML;
+        document.getElementById("demo").innerHTML = list;
+        var x=document.getElementById("myList").childNodes[0];
+        document.getElementById("demo2").innerHTML=x.nodeName;      
+    }
+</script>

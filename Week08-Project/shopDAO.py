@@ -1,7 +1,7 @@
 import mysql.connector
 class ShopDAO:
     db=""
-    def __init__(self): 
+    def __init__(self):
         self.db = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -13,7 +13,6 @@ class ShopDAO:
         cursor = self.db.cursor()
         sql="insert into shop (Product, Barcode, Price) values (%s,%s,%s)"
         cursor.execute(sql, values)
-
         self.db.commit()
         return cursor.lastrowid
 

@@ -1,0 +1,260 @@
+<html>
+    <head>
+        <title> AOC Project Shop </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
+    <body>
+        <h1>Shop</h1>
+        <!--<div> <button id="getAllAjax" onclick="getAllAjax()">Get all products</button> </div>-->
+        <div> <button id="showCreateButton" onclick="showCreate()">Create Product</button></div>
+        <div>
+            <table class="table" id="shopTable">
+                <tr>
+                        <th style="display:none;">id</th>
+                        <th>Product</th>
+                        <th>Barcode</th>
+                        <th>Price</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                </tr>
+            </table>
+        </div>
+        <div id='createUpdateForm' style="display: none">
+                <h2><span id="createLabel">Create a</span> <span id="updateLabel">update</span> Product</h2>
+                <input type="hidden" name="id"/>
+                Product <input type="text" name="Product"/> <br/>
+                Barcode <input type="text" name="Barcode"/> <br/>
+                Price <input type="number" step="0.01" min=0 name="Price"/> <br/>
+                <span><button id="doCreateButton" onclick="doCreate()">Create</button></span>
+                <span><button id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+        </div>
+    </body>
+    <script>
+
+    function showCreate(){
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('shopTable').style.display="none"
+        document.getElementById('createUpdateForm').style.display="block"
+        document.getElementById('createLabel').style.display="inline"
+        document.getElementById('updateLabel').style.display="none"
+        document.getElementById('doCreateButton').style.display="block"
+        document.getElementById('doUpdateButton').style.display="none"
+    }
+    
+    showViewAll();
+    function showViewAll(){
+        $("shopTable").find("tbody").empty();
+        getAllAjax();
+        document.getElementById('showCreateButton').style.display="block"
+        document.getElementById('shopTable').style.display="block"
+        document.getElementById('createUpdateForm').style.display="none"
+    }
+
+    function showUpdate(buttonElement){
+        document.getElementById('showCreateButton').style.display="none"
+        document.getElementById('shopTable').style.display="none"
+        document.getElementById('createUpdateForm').style.display="block"
+        document.getElementById('createLabel').style.display="none"
+        document.getElementById('updateLabel').style.display="inline"
+        document.getElementById('doCreateButton').style.display="none"
+        document.getElementById('doUpdateButton').style.display="block"
+        var rowElement = buttonElement.parentNode.parentNode
+        // these are a way of finding the closest <tr> which would safer, closest()
+        
+        var product = getShopFromRow(rowElement)
+        populateFormWithShop(product)
+    }
+
+    function clearTable(){
+        var Parent = document.getElementById("shopTable");
+        while(Parent.hasChildNodes()){
+        Parent.removeChild(Parent.firstChild);
+        }
+    }
+
+    function doCreate(){
+        var form = document.getElementById('createUpdateForm')
+        var product = {}
+        product.Product = form.querySelector('input[name="Product"]').value
+        product.Barcode = form.querySelector('input[name="Barcode"]').value
+        product.Price = form.querySelector('input[name="Price"]').value
+        console.log(JSON.stringify(product))
+
+        //addShopToTable(product)
+        //clearForm()
+        createShopAjax(product)
+        //clearTable()
+        //showViewAll()
+    }
+
+    function doUpdate(){
+        var product = getShopFromForm();
+        console.log(JSON.stringify(product))
+        var rowElement = document.getElementById(product.id)
+        updateShopAjax(product)
+        setShopInRow(rowElement,product)
+        clearForm()
+        //clearTable()
+        showViewAll()
+    }
+
+    function doDelete(r){
+        var tableElement = document.getElementById('shopTable')
+        var rindex = r.parentNode.parentNode.rowIndex;
+        //var test = document.getElementById("shopTable").rows[rindex].cells[0].innerHTML
+        //console.log(JSON.stringify(test));
+        var rowElement = r.parentNode.parentNode
+        var product = getShopFromRow(rowElement)
+        tableElement.deleteRow(rindex);
+        deleteShop(product);
+    }
+
+    function addShopToTable(product){
+        var tableElement = document.getElementById('shopTable')
+        var rowElement = tableElement.insertRow(-1)
+        rowElement.setAttribute('id',product.id)
+        var cell1 = rowElement.insertCell(0);
+        cell1.innerHTML = product.id
+        var cell2 = rowElement.insertCell(1);
+        cell2.innerHTML = product.Product
+        var cell3 = rowElement.insertCell(2);
+        cell3.innerHTML = product.Barcode
+        var cell4 = rowElement.insertCell(3);
+        cell4.innerHTML = product.Price
+        var cell5 = rowElement.insertCell(4);
+        cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+        var cell6 = rowElement.insertCell(5);
+        cell6.innerHTML = '<button onclick=doDelete(this)>delete</button>'
+    }
+
+    function clearForm(){
+        var form = document.getElementById('createUpdateForm')
+        form.querySelector('input[name="Product"]').value=''
+        form.querySelector('input[name="Barcode"]').value=''
+        form.querySelector('input[name="Price"]').value=''
+    }
+
+    function getShopFromRow(rowElement){
+        var product ={}
+        product.id  = rowElement.getAttribute('id')
+        product.Product = rowElement.cells[1].firstChild.textContent
+        product.Barcode = rowElement.cells[2].firstChild.textContent
+        product.Price = rowElement.cells[3].firstChild.textContent
+        return product
+    }
+
+    function setShopInRow(rowElement, product){
+        rowElement.cells[0].firstChild.textContent= product.id  
+        rowElement.cells[1].firstChild.textContent= product.Product
+        rowElement.cells[2].firstChild.textContent= product.Barcode
+        rowElement.cells[3].firstChild.textContent= product.Price
+    }
+
+    function populateFormWithShop(product){
+        var form = document.getElementById('createUpdateForm')
+        form.querySelector('input[name="id"]').disabled = true
+        form.querySelector('input[name="id"]').value  = product.id
+        form.querySelector('input[name="Product"]').value= product.Product
+        form.querySelector('input[name="Barcode"]').value= product.Barcode
+        form.querySelector('input[name="Price"]').value= product.Price
+        return product
+    }
+
+    function getShopFromForm(){
+        var form = document.getElementById('createUpdateForm')
+        var product = {}
+        product.id = form.querySelector('input[name="id"]').value
+        product.Product = form.querySelector('input[name="Product"]').value
+        product.Barcode = form.querySelector('input[name="Barcode"]').value
+        product.Price = form.querySelector('input[name="Price"]').value
+        console.log(JSON.stringify(product))
+        return product
+    }
+
+    function getAllAjax(){
+        $.ajax({
+            "url": "http://127.0.0.1:5000/shop",
+            "method":"GET",
+            "data":"",
+            "dataType": "JSON",
+            "success":function(result){
+                for (product of result){
+                    addShopToTable(product);
+                }
+                
+            },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+            }
+            });
+    }
+
+    function createShopAjax(product){
+        //var product = {"Product":"Steak","Barcode":"1036606024679","Price":5.60}
+        //console.log(JSON.stringify(product));
+        $.ajax({
+            "url": "http://127.0.0.1:5000/shop",
+            "method":"POST",
+            "data":JSON.stringify(product),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+            console.log(result);
+            product.id = result.id
+            addShopToTable(product)
+            clearForm()
+            clearTable()
+            showViewAll()
+            //document.getElementById("output").innerText = JSON.stringify(result);
+            },
+            "error":function(xhr,status,error){
+            console.log("error: "+status+" msg:"+error);
+            }
+            });
+        }
+
+    // For some reason getting a 400 bad request for this update section even though the data is being stringified and the same method is used for the DELETE method and no 400 bad request. Cannot figure out currently!
+    function updateShopAjax(product){
+        console.log(JSON.stringify(product));
+        //var product = {"Product":"Steak","Barcode":"1036606024679","Price":4.60}
+        //console.log(JSON.stringify(product));
+        $.ajax({
+            "url": "http://127.0.0.1:5000/shop/"+encodeURI(product.id),
+            "method":"PUT",
+            "data":JSON.stringify(product),
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+                //console.log(result);
+                //product.id = result.id
+                //addShopToTable(product)
+                //console.log(result);
+                //document.getElementById("output").innerText = JSON.stringify(result);
+                },
+            "error":function(xhr,status,error){
+                console.log("error: "+status+" msg:"+error);
+                }
+            });
+    }
+
+    function deleteShop(id){
+        //var product = {"id":"5"}
+        //console.log(JSON.stringify(product));
+        $.ajax({
+            "url": "http://127.0.0.1:5000/shop/"+encodeURI(product.id),
+            "method":"DELETE",
+            "data":"",
+            "dataType": "JSON",
+            contentType: "application/json; charset=utf-8",
+            "success":function(result){
+            //console.log(result);
+            //document.getElementById("output").innerText = JSON.stringify(result);
+            },
+            "error":function(xhr,status,error){
+            console.log("error: "+status+" msg:"+error);
+            }
+        });
+    }
+    </script>
+</html>
