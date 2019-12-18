@@ -11,7 +11,7 @@
         <div>
             <table class="table" id="shopTable">
                 <tr>
-                        <th style="display:none;">id</th>
+                        <th>id</th>
                         <th>Product</th>
                         <th>Barcode</th>
                         <th>Price</th>
@@ -25,7 +25,7 @@
                 <input type="hidden" name="id"/>
                 Product <input type="text" name="Product"/> <br/>
                 Barcode <input type="text" name="Barcode"/> <br/>
-                Price <input type="number" step="0.01" min=0 name="Price"/> <br/>
+                Price <input type="number" name="Price"/> <br/>
                 <span><button id="doCreateButton" onclick="doCreate()">Create</button></span>
                 <span><button id="doUpdateButton" onclick="doUpdate()">Update</button></span>
         </div>
@@ -140,7 +140,7 @@
         product.id  = rowElement.getAttribute('id')
         product.Product = rowElement.cells[1].firstChild.textContent
         product.Barcode = rowElement.cells[2].firstChild.textContent
-        product.Price = rowElement.cells[3].firstChild.textContent
+        product.Price = parseInt(rowElement.cells[3].firstChild.textContent,10)
         return product
     }
 
@@ -226,13 +226,13 @@
             "dataType": "JSON",
             contentType: "application/json; charset=utf-8",
             "success":function(result){
-                //console.log(result);
+                console.log(result);
                 //product.id = result.id
                 //addShopToTable(product)
-                //console.log(result);
                 //document.getElementById("output").innerText = JSON.stringify(result);
                 },
             "error":function(xhr,status,error){
+                console.log(result);
                 console.log("error: "+status+" msg:"+error);
                 }
             });

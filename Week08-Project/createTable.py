@@ -8,6 +8,6 @@ db = mysql.connector.connect(
 )
 
 cursor = db.cursor()
-sql="CREATE TABLE shop (id INT AUTO_INCREMENT PRIMARY KEY, Product VARCHAR(255), Barcode VARCHAR(255), Price FLOAT)"
+sql="CREATE TABLE shop (id INT AUTO_INCREMENT PRIMARY KEY, Product VARCHAR(255), Barcode VARCHAR(255), Price INT)"
 
 cursor.execute(sql)

@@ -44,15 +44,15 @@ def update(id):
         abort(404)
     reqJson = request.json
     # Could not get this part of the code to run for type float, had to comment out.
-    #if 'Price' in reqJson and type(reqJson['Price'] is not float):
-     #   abort(400)
+    if 'Price' in reqJson and type(reqJson['Price']) is not int:
+        abort(400)
     if 'Product' in reqJson:
         foundShop['Product'] = reqJson['Product']
     if 'Barcode' in reqJson:
         foundShop['Barcode'] = reqJson['Barcode']
     if 'Price' in reqJson:
         foundShop['Price'] = reqJson['Price']
-    values = (foundShop['Product'],foundShop['Barcode'],foundShop['Price'],foundShop['id']) # Deleted ", foundShop['id']" out of this line as it was throwing an error, and i do not want the id updated anyway, the id will remian the same for all products as it is a hidden element.
+    values = (foundShop['Product'],foundShop['Barcode'],foundShop['Price'],foundShop['id'])
     shopDAO.update(values)
     return jsonify(foundShop)
 
