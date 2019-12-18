@@ -46,6 +46,7 @@ def update(id):
     # Could not get this part of the code to run for type float, had to comment out.
     if 'Price' in reqJson and type(reqJson['Price']) is not int:
         abort(400)
+        
     if 'Product' in reqJson:
         foundShop['Product'] = reqJson['Product']
     if 'Barcode' in reqJson:
@@ -54,7 +55,7 @@ def update(id):
         foundShop['Price'] = reqJson['Price']
     values = (foundShop['Product'],foundShop['Barcode'],foundShop['Price'],foundShop['id'])
     shopDAO.update(values)
-    return jsonify(foundShop)
+    return jsonify(foundShop)  
 
 # curl -X DELETE "http://127.0.0.1:5000/shop/2"
 @app.route('/shop/<int:id>', methods=['DELETE'])

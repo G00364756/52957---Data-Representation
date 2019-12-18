@@ -3,31 +3,52 @@
         <title> AOC Project Shop </title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+        body {
+        margin:15px;
+        background-image: url("supermarket.jpg");
+        background-position: center; /* Center the image */
+        background-repeat: no-repeat; /* Do not repeat the image */
+        background-size: cover; /* Resize the background image to cover the entire container */
+        }
+
+        .button {
+        border: 50px solid rgba(0, 0, 0, 0.596); /* Black */
+        }
+        
+        .table {
+        margin: auto;
+        width: 50% !important;
+        }
+
+        </style>
     </head>
     <body>
-        <h1>Shop</h1>
+        <div align="center"><div style=padding:15px;width:670px;background-color:rgba(122,211,178,0.900);><div style=background-color:rgba(255,255,255,0.89);width:200px;><h1>Shop</h1></div><button style="border:1px solid black" type="button" class="btn btn-primary" id="showCreateButton" onclick="showCreate()">Create Product</button></div></div> 
         <!--<div> <button id="getAllAjax" onclick="getAllAjax()">Get all products</button> </div>-->
-        <div> <button id="showCreateButton" onclick="showCreate()">Create Product</button></div>
         <div>
-            <table class="table" id="shopTable">
+            <table style=background-color:rgba(122,211,178,0.900); class="table" id="shopTable">
                 <tr>
-                        <th>id</th>
-                        <th>Product</th>
-                        <th>Barcode</th>
-                        <th>Price</th>
-                        <th>Update</th>
-                        <th>Delete</th>
+                        <th style="font-size:20px;">id</th>
+                        <th style="font-size:20px;">Product</th>
+                        <th style="font-size:20px;">Barcode</th>
+                        <th style="font-size:20px;">Price</th>
+                        <th style="font-size:20px;">Update</th>
+                        <th style="font-size:20px;">Delete</th>
                 </tr>
             </table>
         </div>
-        <div id='createUpdateForm' style="display: none">
-                <h2><span id="createLabel">Create a</span> <span id="updateLabel">update</span> Product</h2>
+        <div align="center">
+        <div align="center" id='createUpdateForm' style="display:none;width:670px;background-color:rgba(122,211,178,0.900);">
+                <h2><span id="createLabel">Create a</span> <span id="updateLabel">Update</span> Product</h2>
                 <input type="hidden" name="id"/>
-                Product <input type="text" name="Product"/> <br/>
-                Barcode <input type="text" name="Barcode"/> <br/>
-                Price <input type="number" name="Price"/> <br/>
-                <span><button id="doCreateButton" onclick="doCreate()">Create</button></span>
-                <span><button id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+                Product <input style="margin-left:3px;" type="text" name="Product"/> <br/>
+                Barcode <input style="margin-left:1px;" type="text" name="Barcode"/> <br/>
+                Price <input style="margin-left:24px;" type="number" name="Price"/> <br/>
+                <span style="padding:5px;" ><button style="border:1px solid black" type="button" class="btn btn-success" id="doCreateButton" onclick="doCreate()">Create</button></span>
+                <span style="padding:5px;" ><button style="border:1px solid black" type="button" class="btn btn-warning" id="doUpdateButton" onclick="doUpdate()">Update</button></span>
+        </div>
         </div>
     </body>
     <script>
@@ -44,11 +65,11 @@
     
     showViewAll();
     function showViewAll(){
-        $("shopTable").find("tbody").empty();
-        getAllAjax();
+        //$("shopTable").find("tbody").empty();
         document.getElementById('showCreateButton').style.display="block"
         document.getElementById('shopTable').style.display="block"
         document.getElementById('createUpdateForm').style.display="none"
+        getAllAjax();
     }
 
     function showUpdate(buttonElement){
@@ -59,6 +80,7 @@
         document.getElementById('updateLabel').style.display="inline"
         document.getElementById('doCreateButton').style.display="none"
         document.getElementById('doUpdateButton').style.display="block"
+
         var rowElement = buttonElement.parentNode.parentNode
         // these are a way of finding the closest <tr> which would safer, closest()
         
@@ -90,12 +112,12 @@
 
     function doUpdate(){
         var product = getShopFromForm();
-        console.log(JSON.stringify(product))
+        //console.log(JSON.stringify(product))
         var rowElement = document.getElementById(product.id)
         updateShopAjax(product)
         setShopInRow(rowElement,product)
         clearForm()
-        //clearTable()
+        clearTable()
         showViewAll()
     }
 
@@ -123,9 +145,9 @@
         var cell4 = rowElement.insertCell(3);
         cell4.innerHTML = product.Price
         var cell5 = rowElement.insertCell(4);
-        cell5.innerHTML = '<button onclick="showUpdate(this)">Update</button>'
+        cell5.innerHTML = '<button style="border:1px solid black" type="button" class="btn btn-warning" onclick="showUpdate(this)">Update</button>'
         var cell6 = rowElement.insertCell(5);
-        cell6.innerHTML = '<button onclick=doDelete(this)>delete</button>'
+        cell6.innerHTML = '<button style="border:1px solid black" type="button" class="btn btn-danger" onclick=doDelete(this)>delete</button>'
     }
 
     function clearForm(){
@@ -140,7 +162,7 @@
         product.id  = rowElement.getAttribute('id')
         product.Product = rowElement.cells[1].firstChild.textContent
         product.Barcode = rowElement.cells[2].firstChild.textContent
-        product.Price = parseInt(rowElement.cells[3].firstChild.textContent,10)
+        product.Price = rowElement.cells[3].firstChild.textContent
         return product
     }
 
@@ -168,7 +190,7 @@
         product.Product = form.querySelector('input[name="Product"]').value
         product.Barcode = form.querySelector('input[name="Barcode"]').value
         product.Price = form.querySelector('input[name="Price"]').value
-        console.log(JSON.stringify(product))
+        //console.log(JSON.stringify(product))
         return product
     }
 
@@ -216,7 +238,7 @@
 
     // For some reason getting a 400 bad request for this update section even though the data is being stringified and the same method is used for the DELETE method and no 400 bad request. Cannot figure out currently!
     function updateShopAjax(product){
-        console.log(JSON.stringify(product));
+        console.log(product);
         //var product = {"Product":"Steak","Barcode":"1036606024679","Price":4.60}
         //console.log(JSON.stringify(product));
         $.ajax({
@@ -227,12 +249,8 @@
             contentType: "application/json; charset=utf-8",
             "success":function(result){
                 console.log(result);
-                //product.id = result.id
-                //addShopToTable(product)
-                //document.getElementById("output").innerText = JSON.stringify(result);
                 },
             "error":function(xhr,status,error){
-                console.log(result);
                 console.log("error: "+status+" msg:"+error);
                 }
             });
