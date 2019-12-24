@@ -8,18 +8,36 @@ Created:             30/09/2019
 Due date:            TBC
 
 ## Contents
-1. Lab1: Create HTML page
-2. 
-3. 
-4. 
+1. week01-xml
+2. week02-javascript
+3. week03-webScraping
+4. week04-json_ajax_rest
+5. week05-ajax_rest
+6. week08-Project
+7. .gitignore
+8. LICENSE
+9. README.md
 
-### Lab1: Create HTML page
-File name: lab1.html
+### week01-xml: 
+Lab 1 - Create HTML page and xml file
+File names:-
+* carviewer.html
+* library.xml
 
-This file contains code developed as a solution to the Lab 1 exercise of the module 52957.
-The objective of Lab 1 was to create a HTML page named carviewer.html with;
-1. A create button
-2. A table
-3. A form
+### week02-javascript
+Lab 2 - Use of javascript to add functionality to the webpage made in the lab in week 1.
 
-Extra credit is assigned for styling the webpage to look a bit nicer using tools such as bootstrap.
+### week03-webScraping
+Lab 3 - Webscraping labs completed.
+
+### week04-json_ajax_rest
+Lab 4 - JSON and AJAX (with jQuery)completed.
+
+### week05-ajax_rest
+Labs 5.1, 5.2 and 5.3 completed.
+
+### week06-ajax_rest
+Not done
+
+### week08-Project
+Shop website created. RESTful API implimented, however the AJAX query to the shopDAO results in the connection to the server being dropped for the "Update" buttons. I cannot currently figure out why this is the case.

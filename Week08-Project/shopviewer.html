@@ -29,13 +29,13 @@
         <!--<div> <button id="getAllAjax" onclick="getAllAjax()">Get all products</button> </div>-->
         <div>
             <table style=background-color:rgba(122,211,178,0.900); class="table" id="shopTable">
-                <tr>
-                        <th style="font-size:20px;">id</th>
-                        <th style="font-size:20px;">Product</th>
-                        <th style="font-size:20px;">Barcode</th>
-                        <th style="font-size:20px;">Price</th>
-                        <th style="font-size:20px;">Update</th>
-                        <th style="font-size:20px;">Delete</th>
+                <tr align="center">
+                        <th align="center" style="font-size:20px;">id</th>
+                        <th align="center" style="font-size:20px;">Product</th>
+                        <th align="center" style="font-size:20px;">Barcode</th>
+                        <th align="center" style="font-size:20px;">Price</th>
+                        <th align="center" style="font-size:20px;">Update</th>
+                        <th align="center" style="font-size:20px;">Delete</th>
                 </tr>
             </table>
         </div>
@@ -186,11 +186,13 @@
     function getShopFromForm(){
         var form = document.getElementById('createUpdateForm')
         var product = {}
-        product.id = form.querySelector('input[name="id"]').value
+        product.id = parseInt(form.querySelector('input[name="id"]').value,20)
         product.Product = form.querySelector('input[name="Product"]').value
         product.Barcode = form.querySelector('input[name="Barcode"]').value
-        product.Price = form.querySelector('input[name="Price"]').value
-        //console.log(JSON.stringify(product))
+        product.Price = parseInt(form.querySelector('input[name="Price"]').value,10)
+        console.log(JSON.stringify(product))
+        console.log("Parsing Product Price")
+        console.log(product.Price)
         return product
     }
 
@@ -238,6 +240,7 @@
 
     // For some reason getting a 400 bad request for this update section even though the data is being stringified and the same method is used for the DELETE method and no 400 bad request. Cannot figure out currently!
     function updateShopAjax(product){
+        console.log("This is what is being passed to updateShopAjax")
         console.log(product);
         //var product = {"Product":"Steak","Barcode":"1036606024679","Price":4.60}
         //console.log(JSON.stringify(product));
